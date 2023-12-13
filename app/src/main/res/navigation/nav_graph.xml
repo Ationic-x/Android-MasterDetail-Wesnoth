@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/nav_graph"
+            app:startDestination="@id/recyclerUnitsFragment">
+
+    <fragment android:id="@+id/recyclerUnitsFragment" android:name="com.example.u3p2_masterdetail.RecyclerUnitsFragment"
+              android:label="fragment_recycler_units" tools:layout="@layout/fragment_recycler_units"/>
+    <fragment android:id="@+id/newUnitFragment" android:name="com.example.u3p2_masterdetail.NewUnitFragment"
+              android:label="fragment_new_unit" tools:layout="@layout/fragment_new_unit"/>
+    <fragment android:id="@+id/showUnitFragment" android:name="com.example.u3p2_masterdetail.ShowUnitFragment"
+              android:label="fragment_show_unit" tools:layout="@layout/fragment_show_unit"/>
+    <action android:id="@+id/action_global_newUnitFragment" app:destination="@id/newUnitFragment"/>
+    <action android:id="@+id/action_global_showUnitFragment" app:destination="@id/showUnitFragment"/>
+</navigation>
