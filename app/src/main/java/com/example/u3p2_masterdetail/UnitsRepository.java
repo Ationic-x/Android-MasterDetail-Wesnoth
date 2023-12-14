@@ -8,23 +8,23 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+// Class with the values and basic method of units
 public class UnitsRepository {
-    UnitsDataBase.UnitsDao unitsDao;
-    Executor executor;
+    UnitsDataBase.UnitsDao unitsDao; // DataBase of unit (Data Access Object)
+    Executor executor; // Execute on background threads
 
-    interface Callback{
-        void cuandoFinalice(List<Unit> units);
-    }
-
+    // Constructor init Executor and Database
     UnitsRepository(Application application){
         unitsDao = UnitsDataBase.getInstance(application).getUnitsDao();
         executor = Executors.newSingleThreadExecutor();
     }
 
+    // Extended method from DataBase
     LiveData<List<Unit>> get(){
         return unitsDao.get();
     }
 
+    // Methods that change the DataBase are executed in the background
     void insert(Unit unit){
         executor.execute(() -> {
             unitsDao.insert(unit);

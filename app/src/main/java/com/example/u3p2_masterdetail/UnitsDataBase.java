@@ -13,11 +13,14 @@ import androidx.room.Room;
 
 import java.util.List;
 
+// Annotation related database
 @Database(entities = { Unit.class }, version = 1, exportSchema = false)
+// Class singleton that works as a DataBase (SQLite)
 public abstract class UnitsDataBase extends RoomDatabase {
-    private static volatile UnitsDataBase INSTANCE;
+    private static volatile UnitsDataBase INSTANCE; // Volatile object of itself
 
-
+    // Dao all methods related to work with the Database
+    // Insert, Delete, Custom Query...
     @Dao
     interface UnitsDao {
         @Query("SELECT * FROM Unit")
@@ -28,18 +31,26 @@ public abstract class UnitsDataBase extends RoomDatabase {
         @Delete
         void delete(Unit unit);
     }
+
+    // Constructor Singleton DataBase
     static UnitsDataBase getInstance(final Context context) {
+        // If there is no DataBase
         if (INSTANCE == null) {
+            // Synchronize with DataBase
             synchronized (UnitsDataBase.class) {
+                // If still no Database
                 if (INSTANCE == null) {
+                    // Create a new one
                     INSTANCE = Room.databaseBuilder(context, UnitsDataBase.class, "units.db")
                             .fallbackToDestructiveMigration()
                             .build();
                 }
             }
         }
+        // Return DataBase
         return INSTANCE;
     }
 
+    // Method get UnitsDao
     public abstract UnitsDao getUnitsDao();
 }

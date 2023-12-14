@@ -8,16 +8,28 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
+// ViewModel info related Fragments (view) and Database + Unit (Model)
 public class UnitsViewModel extends AndroidViewModel {
-    UnitsRepository unitsRepository;
-    MutableLiveData<Unit> unitSelected = new MutableLiveData<>();
+    UnitsRepository unitsRepository; // Repository where is stored the values
+    MutableLiveData<Unit> unitSelected = new MutableLiveData<>(); // Mutable value (change in view)
 
+    // Constructor, defined the AndroidViewModel and Repository
     public UnitsViewModel(@NonNull Application application){
         super(application);
 
         unitsRepository = new UnitsRepository(application);
     }
 
+    // Getter and setter related mutable values
+    MutableLiveData<Unit> getSelected() {
+        return unitSelected;
+    }
+
+    void setSelected(Unit unit) {
+        unitSelected.setValue(unit);
+    }
+
+    // Extended repository method
     LiveData<List<Unit>> get(){
         return unitsRepository.get();
     }
@@ -30,11 +42,4 @@ public class UnitsViewModel extends AndroidViewModel {
         unitsRepository.delete(unit);
     }
 
-    MutableLiveData<Unit> getSelected() {
-        return unitSelected;
-    }
-
-    void setSelected(Unit unit) {
-        unitSelected.setValue(unit);
-    }
 }
