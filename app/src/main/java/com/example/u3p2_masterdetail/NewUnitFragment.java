@@ -3,6 +3,7 @@ package com.example.u3p2_masterdetail;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
@@ -21,6 +22,10 @@ import androidx.navigation.Navigation;
 import com.example.u3p2_masterdetail.databinding.FragmentNewUnitBinding;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 // Class related to create new units screen
 public class NewUnitFragment extends Fragment {
@@ -65,12 +70,10 @@ public class NewUnitFragment extends Fragment {
 
         GridView gridViewImages = menuDesplegableView.findViewById(R.id.gvImages);
         // Carga las IDs de las imágenes desde /res/drawable/units
-        int[] imageIds = {
-                R.drawable.adept,
-        };
+        List<Integer> drawablesInUnits = getDrawables("unit");
 
         // Configura el adaptador para el GridView
-        CustomAdapter customAdapter = new CustomAdapter(requireContext(), imageIds);
+        CustomAdapter customAdapter = new CustomAdapter(requireContext(), drawablesInUnits);
         gridViewImages.setAdapter(customAdapter);
 
         bottomSheetDialog.setContentView(menuDesplegableView);
@@ -104,6 +107,22 @@ public class NewUnitFragment extends Fragment {
         bottomSheetDialog.show();
     }
 
+    public static List<Integer> getDrawables(String type) {
+        List<Integer> drawableList = new ArrayList<>();
+        try {
+            Field[] fields = R.drawable.class.getFields();
+            for (Field field : fields) {
+                if (field.getName().startsWith(type + "_")) {
+                    int resourceId = (int) field.get(null);
+                    drawableList.add(resourceId);
+                }
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return drawableList;
+    }
+
     private int obtenerAlturaDeseada() {
         WindowManager windowManager = (WindowManager) requireContext().getSystemService(Context.WINDOW_SERVICE);
 
@@ -112,7 +131,7 @@ public class NewUnitFragment extends Fragment {
             int screenHeight = displayMetrics.heightPixels;
 
             // Calcula el 33% de la altura de la pantalla
-            return screenHeight * 50 / 100;
+            return (int) (screenHeight * 0.50);
         }
 
         // En caso de que no se pueda obtener el WindowManager
@@ -121,16 +140,16 @@ public class NewUnitFragment extends Fragment {
 
     static class CustomAdapter extends BaseAdapter {
         private final Context mContext;
-        private final int[] imageIds; // Debes cargar aquí las IDs de las imágenes desde /res/drawable/units
+        private final List<Integer> imageIds; // Debes cargar aquí las IDs de las imágenes desde /res/drawable/units
 
-        public CustomAdapter(Context context, int[] imageIds) {
+        public CustomAdapter(Context context, List<Integer> imageIds) {
             this.mContext = context;
             this.imageIds = imageIds;
         }
 
         @Override
         public int getCount() {
-            return imageIds.length;
+            return imageIds.size();
         }
 
         @Override
@@ -157,7 +176,7 @@ public class NewUnitFragment extends Fragment {
             }
 
             // Asigna la imagen a la ImageView
-            imageView.setImageResource(imageIds[position]);
+            imageView.setImageResource(imageIds.get(position));
 
             return imageView;
         }
