@@ -10,17 +10,17 @@ import android.view.ViewGroup;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import com.example.u3p2_masterdetail.databinding.FragmentShowUnitBinding;
+import com.example.u3p2_masterdetail.databinding.FragmentModifyUnitBinding;
 
-// Class to show specific unit info
-public class ShowUnitFragment extends Fragment {
-    private FragmentShowUnitBinding binding;
+public class modifyUnitFragment extends Fragment {
+
+    private FragmentModifyUnitBinding binding;
 
 
     // Inflate and get the binding
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return (binding = FragmentShowUnitBinding.inflate(inflater, container, false)).getRoot();
+        return (binding = FragmentModifyUnitBinding.inflate(inflater, container, false)).getRoot();
     }
 
     // After create the view, set the behavior
@@ -33,15 +33,15 @@ public class ShowUnitFragment extends Fragment {
         NavController navController = Navigation.findNavController(view);
         // Get from the viewModel the selected Unit, show on Screen the Data
         unitsViewModel.getSelected().observe(getViewLifecycleOwner(), unit -> {
-            binding.tvName.setText(unit.name);
-            binding.tvDescription.setText(unit.description);
+            binding.etName.setText(unit.name);
+            binding.etDescription.setText(unit.description);
             binding.ivUnit.setImageResource(unit.image);
-            binding.tvCost.setText(getString(R.string.cost_value, String.valueOf(unit.cost)));
-            binding.tvHp.setText(getString(R.string.hp_value, String.valueOf(unit.hp)));
-            binding.tvMp.setText(getString(R.string.mp_value, String.valueOf(unit.mp)));
-            binding.tvXp.setText(getString(R.string.xp_value, String.valueOf(unit.xp)));
+            binding.etCost.setText(String.valueOf(unit.cost));
+            binding.etHp.setText(String.valueOf(unit.hp));
+            binding.etMp.setText(String.valueOf(unit.mp));
+            binding.etXp.setText(String.valueOf(unit.xp));
         });
 
-        binding.fbtnGoModifyUnit.setOnClickListener(v -> navController.navigate(R.id.action_global_modifyUnitFragment));
+        binding.btnModify.setOnClickListener( v -> navController.navigate(R.id.showUnitFragment));
     }
 }

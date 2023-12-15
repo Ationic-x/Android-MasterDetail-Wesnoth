@@ -36,7 +36,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/fl_unit"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="30sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" android:textStyle="bold"/>
     <!-- Data -->
     <TextView
             android:id="@+id/tv_cost"
@@ -45,6 +48,9 @@
             app:layout_constraintStart_toEndOf="@id/fl_unit"
             app:layout_constraintTop_toBottomOf="@+id/tv_name"
             app:layout_constraintEnd_toStartOf="@+id/tv_hp"
+            android:textSize="18sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:text="@string/cost_value"/>
     <TextView
             android:id="@+id/tv_hp"
@@ -53,6 +59,9 @@
             app:layout_constraintStart_toEndOf="@id/tv_cost"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            android:textSize="18sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:text="@string/hp_value"/>
     <TextView
             android:id="@+id/tv_xp"
@@ -61,6 +70,9 @@
             app:layout_constraintStart_toEndOf="@id/fl_unit"
             app:layout_constraintTop_toBottomOf="@+id/tv_cost"
             app:layout_constraintEnd_toStartOf="@+id/tv_mp"
+            android:textSize="18sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:text="@string/xp_value"/>
     <TextView
             android:id="@+id/tv_mp"
@@ -69,6 +81,9 @@
             app:layout_constraintStart_toEndOf="@id/tv_xp"
             app:layout_constraintTop_toBottomOf="@+id/tv_hp"
             app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="18sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:text="@string/mp_value"/>
     <!-- Description -->
     <TextView
@@ -77,5 +92,18 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fl_unit"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="18sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fbtn_go_modify_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="16dp"
+            app:srcCompat="@android:drawable/ic_menu_edit"
+            android:contentDescription="@string/button"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

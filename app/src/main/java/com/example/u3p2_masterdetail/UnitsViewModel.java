@@ -30,9 +30,13 @@ public class UnitsViewModel extends AndroidViewModel {
         unitSelected.setValue(unit);
     }
 
-    MutableLiveData<Integer> getUnitImage(){return unitImage;}
+    MutableLiveData<Integer> getUnitImage() {
+        return unitImage;
+    }
 
-    void setUnitImage(Integer image) {unitImage.setValue(image);}
+    void setUnitImage(Integer image) {
+        unitImage.setValue(image);
+    }
 
     // Extended repository method
     LiveData<List<Unit>> get(){

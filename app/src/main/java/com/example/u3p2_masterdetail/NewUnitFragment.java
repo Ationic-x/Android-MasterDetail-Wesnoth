@@ -1,7 +1,6 @@
 package com.example.u3p2_masterdetail;
 
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -9,7 +8,13 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.widget.*;
+import android.widget.NumberPicker;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.GridView;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,65 +69,60 @@ public class NewUnitFragment extends Fragment {
             int hp =  Integer.parseInt(binding.etHp.getText().toString());
             int xp =  Integer.parseInt(binding.etXp.getText().toString());
             int mp =  Integer.parseInt(binding.etMp.getText().toString());
+            Integer image = unitsViewModel.getUnitImage().getValue();
             // Insert new view model
-            unitsViewModel.insert(new Unit(name, description, unitsViewModel.getUnitImage().getValue(), cost, hp, xp, mp));
+            unitsViewModel.insert(new Unit(name, description, image == null ? R.drawable.unit_unknown : image , cost, hp, xp, mp));
             // Return to the last fragment
             navController.popBackStack();
         });
 
         binding.flUnit.setOnClickListener(v -> showPictureSelector());
 
-        binding.etCost.setOnClickListener(v -> mostrarDialogoConNumberPicker(binding.etCost));
-        binding.etHp.setOnClickListener(v -> mostrarDialogoConNumberPicker(binding.etHp));
-        binding.etXp.setOnClickListener(v -> mostrarDialogoConNumberPicker(binding.etXp));
-        binding.etMp.setOnClickListener(v -> mostrarDialogoConNumberPicker(binding.etMp));
+        binding.etCost.setOnClickListener(v -> showDialogNumberPicker(binding.etCost));
+        binding.etHp.setOnClickListener(v -> showDialogNumberPicker(binding.etHp));
+        binding.etXp.setOnClickListener(v -> showDialogNumberPicker(binding.etXp));
+        binding.etMp.setOnClickListener(v -> showDialogNumberPicker(binding.etMp));
     }
 
     protected LiveData<Integer> getImage(){
         return unitsViewModel.getUnitImage();
     }
 
-    private void mostrarDialogoConNumberPicker(EditText editText) {
+    private void showDialogNumberPicker(EditText editText) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        LayoutInflater inflater = getLayoutInflater();
-        View view = inflater.inflate(R.layout.number_picker_layout, null);
+        View view = getLayoutInflater().inflate(R.layout.number_picker_layout, null);
 
         final NumberPicker numberPicker = view.findViewById(R.id.number_picker);
 
-        // Configura el rango de valores del NumberPicker
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(300);
 
         builder.setView(view)
-                .setTitle("Selecciona un número")
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                .setTitle("Select a number")
+                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // Obtiene el valor seleccionado
                         editText.setText(String.valueOf(numberPicker.getValue()));
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss(); // Cierra el diálogo
+                        dialog.dismiss();
                     }
-                });
+                }).setCancelable(false);
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     private void showPictureSelector() {
-        // Crea un BottomSheetDialog
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
         View menuDesplegableView = getLayoutInflater().inflate(R.layout.picture_selector, null);
 
         GridView gridViewImages = menuDesplegableView.findViewById(R.id.gvImages);
-        // Carga las IDs de las imágenes desde /res/drawable/units
         List<Integer> drawablesInUnits = getDrawables("unit");
 
-        // Configura el adaptador para el GridView
         CustomAdapter customAdapter = new CustomAdapter(requireContext(), drawablesInUnits);
         gridViewImages.setAdapter(customAdapter);
 
@@ -132,9 +132,8 @@ public class NewUnitFragment extends Fragment {
 
         if (bottomSheet != null) {
             BottomSheetBehavior<FrameLayout> behavior = BottomSheetBehavior.from(bottomSheet);
-            // Establece el tamaño deseado del BottomSheet
             CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomSheet.getLayoutParams();
-            layoutParams.height = obtenerAlturaDeseada();
+            layoutParams.height = getHeight();
             bottomSheet.setLayoutParams(layoutParams);
 
             behavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -180,29 +179,25 @@ public class NewUnitFragment extends Fragment {
                 }
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Log.d("Get Drawable", e.toString());
         }
         return drawableList;
     }
 
-    private int obtenerAlturaDeseada() {
+    private int getHeight() {
         WindowManager windowManager = (WindowManager) requireContext().getSystemService(Context.WINDOW_SERVICE);
 
         if (windowManager != null) {
             DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
             int screenHeight = displayMetrics.heightPixels;
-
-            // Calcula el 33% de la altura de la pantalla
             return (int) (screenHeight * 0.50);
         }
-
-        // En caso de que no se pueda obtener el WindowManager
         return ViewGroup.LayoutParams.WRAP_CONTENT;
     }
 
     class CustomAdapter extends BaseAdapter {
         private final Context context;
-        private final List<Integer> imageIds; // Debes cargar aquí las IDs de las imágenes desde /res/drawable/units
+        private final List<Integer> imageIds;
 
         public CustomAdapter(Context context, List<Integer> imageIds) {
             this.context = context;
@@ -239,7 +234,7 @@ public class NewUnitFragment extends Fragment {
             float aspectRatio = (float) originalBitmap.getWidth() / originalBitmap.getHeight();
             int dstHeight = (int)(200 / aspectRatio);
             int dstWidth = (int)(200 / aspectRatio);
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, dstWidth, dstHeight, false); // Cambia las dimensiones según tus preferencias
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, dstWidth, dstHeight, false);
             imageView.setImageBitmap(resizedBitmap);
             imageView.setScaleType(ImageView.ScaleType.CENTER);
 

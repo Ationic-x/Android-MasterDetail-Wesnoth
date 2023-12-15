@@ -43,12 +43,7 @@ public class RecyclerUnitsFragment extends Fragment {
         navController = Navigation.findNavController(view);
 
         // Method floating button -> navigate new unit fragment
-        binding.fbtnGoNewUnit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_global_newUnitFragment);
-            }
-        });
+        binding.fbtnGoNewUnit.setOnClickListener( v -> navController.navigate(R.id.action_global_newUnitFragment));
 
         // Create adapter and set on the Recycle View
         unitsAdapter = new UnitsAdapter();

@@ -16,5 +16,8 @@
     <string name="cost_value">Cost: %s</string>
     <string name="mp_value">MP: %s</string>
     <string name="xp_value">XP: %s</string>
-    <string name="unit_values">Cost: %1$s&#160;&#160;&#160;HP: %2$s&#160;&#160;&#160;XP: %3$s&#160;&#160;&#160;MP: %4$s</string>
+    <string name="unit_values">Cost: %1$s&#160;&#160;&#160;HP: %2$s&#160;&#160;&#160;XP: %3$s&#160;&#160;&#160;MP:
+        %4$s
+    </string>
+    <string name="unit_modify">Modify</string>
 </resources>
