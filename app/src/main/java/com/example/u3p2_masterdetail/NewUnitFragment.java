@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -41,10 +42,13 @@ public class NewUnitFragment extends Fragment {
     private FragmentNewUnitBinding binding;
     private UnitsViewModel unitsViewModel;
 
+    private boolean modify;
+
 
     // Inflate and get the binding
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        modify = NewUnitFragmentArgs.fromBundle(getArguments()).getModify();
         return (binding = FragmentNewUnitBinding.inflate(inflater, container, false)).getRoot();
     }
 
@@ -60,21 +64,56 @@ public class NewUnitFragment extends Fragment {
 
         getImage().observe(getViewLifecycleOwner(), image -> binding.ivUnit.setImageResource(image));
 
-        // Defined the behavior of the button (on click event)
-        binding.btnCreate.setOnClickListener(v -> {
-            // Get values in the view
-            String name = binding.etName.getText().toString();
-            String description = binding.etDescription.getText().toString();
-            int cost =  Integer.parseInt(binding.etCost.getText().toString());
-            int hp =  Integer.parseInt(binding.etHp.getText().toString());
-            int xp =  Integer.parseInt(binding.etXp.getText().toString());
-            int mp =  Integer.parseInt(binding.etMp.getText().toString());
-            Integer image = unitsViewModel.getUnitImage().getValue();
-            // Insert new view model
-            unitsViewModel.insert(new Unit(name, description, image == null ? R.drawable.unit_unknown : image , cost, hp, xp, mp));
-            // Return to the last fragment
-            navController.popBackStack();
-        });
+        if(modify){
+            binding.btnCreate.setText(R.string.unit_modify);
+
+            Unit selectedUnit = (unitsViewModel.getSelected()).getValue();
+
+            if(selectedUnit == null){
+                navController.popBackStack();
+            }
+            binding.etDescription.setText(selectedUnit.description);
+            binding.etName.setText(String.valueOf(selectedUnit.name));
+            binding.etHp.setText(String.valueOf(selectedUnit.hp));
+            binding.etXp.setText(String.valueOf(selectedUnit.xp));
+            binding.etMp.setText(String.valueOf(selectedUnit.mp));
+            binding.etCost.setText(String.valueOf(selectedUnit.cost));
+
+            // Defined the behavior of the button (on click event)
+            binding.btnCreate.setOnClickListener(v -> {
+                // Get values in the view
+                String name = binding.etName.getText().toString();
+                String description = binding.etDescription.getText().toString();
+                int cost =  Integer.parseInt(binding.etCost.getText().toString());
+                int hp =  Integer.parseInt(binding.etHp.getText().toString());
+                int xp =  Integer.parseInt(binding.etXp.getText().toString());
+                int mp =  Integer.parseInt(binding.etMp.getText().toString());
+                Integer image = unitsViewModel.getUnitImage().getValue();
+                // Insert new view model
+                unitsViewModel.update(selectedUnit, new Unit(name, description, image == null ? R.drawable.unit_unknown : image , cost, hp, xp, mp));
+                // Return to the last fragment
+                navController.popBackStack();
+            });
+        } else {
+            binding.btnCreate.setText(R.string.nw_unit_create);
+
+            // Defined the behavior of the button (on click event)
+            binding.btnCreate.setOnClickListener(v -> {
+                // Get values in the view
+                String name = binding.etName.getText().toString();
+                String description = binding.etDescription.getText().toString();
+                int cost =  Integer.parseInt(binding.etCost.getText().toString());
+                int hp =  Integer.parseInt(binding.etHp.getText().toString());
+                int xp =  Integer.parseInt(binding.etXp.getText().toString());
+                int mp =  Integer.parseInt(binding.etMp.getText().toString());
+                Integer image = unitsViewModel.getUnitImage().getValue();
+                // Insert new view model
+                unitsViewModel.insert(new Unit(name, description, image == null ? R.drawable.unit_unknown : image , cost, hp, xp, mp));
+                // Return to the last fragment
+                navController.popBackStack();
+            });
+        }
+
 
         binding.flUnit.setOnClickListener(v -> showPictureSelector());
 

@@ -51,8 +51,8 @@ public class UnitsViewModel extends AndroidViewModel {
         unitsRepository.delete(unit);
     }
 
-    void update(Unit unit, int image){
-        unitsRepository.update(unit, image);
+    void update(Unit oldUnit, Unit newUnit){
+        unitsRepository.update(oldUnit, newUnit);
     }
 
 }

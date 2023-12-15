@@ -36,10 +36,16 @@ public class UnitsRepository {
         );
     }
 
-    void update(Unit unit, int image){
+    void update(Unit oldUnit, Unit newUnit){
         executor.execute(() -> {
-            unit.image = image;
-            unitsDao.update(unit);
+            oldUnit.name = newUnit.name;
+            oldUnit.image = newUnit.image;
+            oldUnit.mp = newUnit.mp;
+            oldUnit.cost = newUnit.cost;
+            oldUnit.xp = newUnit.xp;
+            oldUnit.hp = newUnit.hp;
+            oldUnit.description = newUnit.description;
+            unitsDao.update(oldUnit);
         });
     }
 

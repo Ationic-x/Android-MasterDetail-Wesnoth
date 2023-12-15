@@ -42,6 +42,10 @@ public class ShowUnitFragment extends Fragment {
             binding.tvXp.setText(getString(R.string.xp_value, String.valueOf(unit.xp)));
         });
 
-        binding.fbtnGoModifyUnit.setOnClickListener(v -> navController.navigate(R.id.action_global_modifyUnitFragment));
+        NavGraphDirections.ActionGlobalNewUnitFragment action = NavGraphDirections.actionGlobalNewUnitFragment(true);
+        binding.fbtnGoModifyUnit.setOnClickListener( v -> {
+            unitsViewModel.setUnitImage(unitsViewModel.getSelected().getValue().image);
+            navController.navigate(action);
+        });
     }
 }

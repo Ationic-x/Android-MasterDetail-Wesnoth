@@ -8,13 +8,10 @@
               android:label="fragment_recycler_units" tools:layout="@layout/fragment_recycler_units"/>
     <fragment android:id="@+id/newUnitFragment" android:name="com.example.u3p2_masterdetail.NewUnitFragment"
               android:label="fragment_new_unit" tools:layout="@layout/fragment_new_unit">
-        <argument android:name="modify_enable" app:argType="boolean" android:defaultValue="false"/>
+        <argument android:name="modify" app:argType="boolean"/>
     </fragment>
     <fragment android:id="@+id/showUnitFragment" android:name="com.example.u3p2_masterdetail.ShowUnitFragment"
               android:label="fragment_show_unit" tools:layout="@layout/fragment_show_unit"/>
     <action android:id="@+id/action_global_newUnitFragment" app:destination="@id/newUnitFragment"/>
     <action android:id="@+id/action_global_showUnitFragment" app:destination="@id/showUnitFragment"/>
-    <fragment android:id="@+id/modifyUnitFragment" android:name="com.example.u3p2_masterdetail.modifyUnitFragment"
-              android:label="fragment_modify_unit" tools:layout="@layout/fragment_modify_unit"/>
-    <action android:id="@+id/action_global_modifyUnitFragment" app:destination="@id/modifyUnitFragment"/>
 </navigation>
