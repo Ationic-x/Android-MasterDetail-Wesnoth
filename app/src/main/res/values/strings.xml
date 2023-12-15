@@ -7,4 +7,9 @@
     <string name="nw_unit_description">Description</string>
     <string name="nw_unit_create">Create</string>
     <string name="image_show_unit">Image representative of the unit</string>
+    <string name="cost">Cost:</string>
+    <string name="hp">HP:</string>
+    <string name="xp">XP:</string>
+    <string name="mp">MP:</string>
+    <string name="empty_value">0</string>
 </resources>

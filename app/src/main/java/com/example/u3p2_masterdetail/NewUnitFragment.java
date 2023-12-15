@@ -1,14 +1,15 @@
 package com.example.u3p2_masterdetail;
 
+import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
+import android.widget.*;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
-import android.widget.GridView;
-import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -52,7 +53,7 @@ public class NewUnitFragment extends Fragment {
         // Defined the behavior of the button (on click event)
         binding.btnCreate.setOnClickListener(v -> {
             // Get values in the view
-            String name = binding.tvName.getText().toString();
+            String name = binding.etName.getText().toString();
             String description = binding.etDescription.getText().toString();
             // Insert new view model
             unitsViewModel.insert(new Unit(name, description));
@@ -60,7 +61,43 @@ public class NewUnitFragment extends Fragment {
             navController.popBackStack();
         });
 
-        binding.btnPicture.setOnClickListener(v -> showPictureSelector());
+        binding.flUnit.setOnClickListener(v -> showPictureSelector());
+
+        binding.etCost.setOnClickListener(v -> mostrarDialogoConNumberPicker());
+        binding.etHp.setOnClickListener(v -> mostrarDialogoConNumberPicker());
+        binding.etXp.setOnClickListener(v -> mostrarDialogoConNumberPicker());
+        binding.etMp.setOnClickListener(v -> mostrarDialogoConNumberPicker());
+    }
+
+    private void mostrarDialogoConNumberPicker() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.number_picker_layout, null);
+
+        final NumberPicker numberPicker = view.findViewById(R.id.number_picker);
+
+        // Configura el rango de valores del NumberPicker
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(300);
+
+        builder.setView(view)
+                .setTitle("Selecciona un número")
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Obtiene el valor seleccionado
+                        int valorSeleccionado = numberPicker.getValue();
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss(); // Cierra el diálogo
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void showPictureSelector() {
@@ -105,6 +142,15 @@ public class NewUnitFragment extends Fragment {
             });
         }
         bottomSheetDialog.show();
+
+
+        gridViewImages.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                bottomSheetDialog.cancel();
+                binding.ivUnit.setImageResource(drawablesInUnits.get(position));
+            }
+        });
     }
 
     public static List<Integer> getDrawables(String type) {
@@ -113,8 +159,11 @@ public class NewUnitFragment extends Fragment {
             Field[] fields = R.drawable.class.getFields();
             for (Field field : fields) {
                 if (field.getName().startsWith(type + "_")) {
-                    int resourceId = (int) field.get(null);
-                    drawableList.add(resourceId);
+                    Object value =  field.get(R.drawable.class);
+                    if (value instanceof Integer) {
+                        int resourceId = (int) value;
+                        drawableList.add(resourceId);
+                    }
                 }
             }
         } catch (IllegalAccessException e) {
@@ -138,12 +187,12 @@ public class NewUnitFragment extends Fragment {
         return ViewGroup.LayoutParams.WRAP_CONTENT;
     }
 
-    static class CustomAdapter extends BaseAdapter {
-        private final Context mContext;
+    class CustomAdapter extends BaseAdapter {
+        private final Context context;
         private final List<Integer> imageIds; // Debes cargar aquí las IDs de las imágenes desde /res/drawable/units
 
         public CustomAdapter(Context context, List<Integer> imageIds) {
-            this.mContext = context;
+            this.context = context;
             this.imageIds = imageIds;
         }
 
@@ -167,16 +216,21 @@ public class NewUnitFragment extends Fragment {
             ImageView imageView;
 
             if (convertView == null) {
-                // Si no hay una vista reutilizable, crea una nueva ImageView
-                imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(200, 200)); // Ajusta el tamaño según tus necesidades
-                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView = new ImageView(context);
+                imageView.setLayoutParams(new GridView.LayoutParams(275, 275));
             } else {
                 imageView = (ImageView) convertView;
             }
 
-            // Asigna la imagen a la ImageView
-            imageView.setImageResource(imageIds.get(position));
+            Bitmap originalBitmap = BitmapFactory.decodeResource(getResources(), imageIds.get(position));
+            float aspectRatio = (float) originalBitmap.getWidth() / originalBitmap.getHeight();
+            int dstHeight = (int)(200 / aspectRatio);
+            int dstWidth = (int)(200 / aspectRatio);
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, dstWidth, dstHeight, false); // Cambia las dimensiones según tus preferencias
+            imageView.setImageBitmap(resizedBitmap);
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
+
+            imageView.setBackgroundResource(R.drawable.frame);
 
             return imageView;
         }
