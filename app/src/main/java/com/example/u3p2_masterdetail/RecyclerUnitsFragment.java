@@ -41,9 +41,9 @@ public class RecyclerUnitsFragment extends Fragment {
         // Init View Model and the NavController
         unitsViewModel = new ViewModelProvider(requireActivity()).get(UnitsViewModel.class);
         navController = Navigation.findNavController(view);
-
         // Method floating button -> navigate new unit fragment
-        binding.fbtnGoNewUnit.setOnClickListener( v -> navController.navigate(R.id.action_global_newUnitFragment));
+        RecyclerUnitsFragmentDirections.ActionGlobalNewUnitFragment action = RecyclerUnitsFragmentDirections.actionGlobalNewUnitFragment();
+        binding.fbtnGoNewUnit.setOnClickListener( v -> navController.navigate(action));
 
         // Create adapter and set on the Recycle View
         unitsAdapter = new UnitsAdapter();
