@@ -34,6 +34,11 @@ public class ShowUnitFragment extends Fragment {
         unitsViewModel.getSelected().observe(getViewLifecycleOwner(), unit -> {
             binding.tvName.setText(unit.name);
             binding.tvDescription.setText(unit.description);
+            binding.ivUnit.setImageResource(unit.image);
+            binding.tvCost.setText(getString(R.string.cost_value, String.valueOf(unit.cost)));
+            binding.tvHp.setText(getString(R.string.hp_value, String.valueOf(unit.hp)));
+            binding.tvMp.setText(getString(R.string.mp_value, String.valueOf(unit.mp)));
+            binding.tvXp.setText(getString(R.string.xp_value, String.valueOf(unit.xp)));
         });
     }
 }

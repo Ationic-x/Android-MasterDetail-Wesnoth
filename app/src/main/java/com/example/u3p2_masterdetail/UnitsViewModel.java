@@ -12,6 +12,7 @@ import java.util.List;
 public class UnitsViewModel extends AndroidViewModel {
     UnitsRepository unitsRepository; // Repository where is stored the values
     MutableLiveData<Unit> unitSelected = new MutableLiveData<>(); // Mutable value (change in view)
+    MutableLiveData<Integer> unitImage = new MutableLiveData<>(R.drawable.unit_unknown);
 
     // Constructor, defined the AndroidViewModel and Repository
     public UnitsViewModel(@NonNull Application application){
@@ -29,6 +30,10 @@ public class UnitsViewModel extends AndroidViewModel {
         unitSelected.setValue(unit);
     }
 
+    MutableLiveData<Integer> getUnitImage(){return unitImage;}
+
+    void setUnitImage(Integer image) {unitImage.setValue(image);}
+
     // Extended repository method
     LiveData<List<Unit>> get(){
         return unitsRepository.get();
@@ -40,6 +45,10 @@ public class UnitsViewModel extends AndroidViewModel {
 
     void delete(Unit unit){
         unitsRepository.delete(unit);
+    }
+
+    void update(Unit unit, int image){
+        unitsRepository.update(unit, image);
     }
 
 }

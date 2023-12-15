@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.*;
 import android.view.WindowManager;
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,6 +34,7 @@ import java.util.List;
 public class NewUnitFragment extends Fragment {
 
     private FragmentNewUnitBinding binding;
+    private UnitsViewModel unitsViewModel;
 
 
     // Inflate and get the binding
@@ -46,30 +49,40 @@ public class NewUnitFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState); // Values to the father
 
         // View model related modify db
-        UnitsViewModel unitsViewModel = new ViewModelProvider(requireActivity()).get(UnitsViewModel.class);
+        unitsViewModel = new ViewModelProvider(requireActivity()).get(UnitsViewModel.class);
         // NavController navigate between fragments
         NavController navController = Navigation.findNavController(view);
+
+        getImage().observe(getViewLifecycleOwner(), image -> binding.ivUnit.setImageResource(image));
 
         // Defined the behavior of the button (on click event)
         binding.btnCreate.setOnClickListener(v -> {
             // Get values in the view
             String name = binding.etName.getText().toString();
             String description = binding.etDescription.getText().toString();
+            int cost =  Integer.parseInt(binding.etCost.getText().toString());
+            int hp =  Integer.parseInt(binding.etHp.getText().toString());
+            int xp =  Integer.parseInt(binding.etXp.getText().toString());
+            int mp =  Integer.parseInt(binding.etMp.getText().toString());
             // Insert new view model
-            unitsViewModel.insert(new Unit(name, description));
+            unitsViewModel.insert(new Unit(name, description, unitsViewModel.getUnitImage().getValue(), cost, hp, xp, mp));
             // Return to the last fragment
             navController.popBackStack();
         });
 
         binding.flUnit.setOnClickListener(v -> showPictureSelector());
 
-        binding.etCost.setOnClickListener(v -> mostrarDialogoConNumberPicker());
-        binding.etHp.setOnClickListener(v -> mostrarDialogoConNumberPicker());
-        binding.etXp.setOnClickListener(v -> mostrarDialogoConNumberPicker());
-        binding.etMp.setOnClickListener(v -> mostrarDialogoConNumberPicker());
+        binding.etCost.setOnClickListener(v -> mostrarDialogoConNumberPicker(binding.etCost));
+        binding.etHp.setOnClickListener(v -> mostrarDialogoConNumberPicker(binding.etHp));
+        binding.etXp.setOnClickListener(v -> mostrarDialogoConNumberPicker(binding.etXp));
+        binding.etMp.setOnClickListener(v -> mostrarDialogoConNumberPicker(binding.etMp));
     }
 
-    private void mostrarDialogoConNumberPicker() {
+    protected LiveData<Integer> getImage(){
+        return unitsViewModel.getUnitImage();
+    }
+
+    private void mostrarDialogoConNumberPicker(EditText editText) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.number_picker_layout, null);
@@ -86,7 +99,7 @@ public class NewUnitFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Obtiene el valor seleccionado
-                        int valorSeleccionado = numberPicker.getValue();
+                        editText.setText(String.valueOf(numberPicker.getValue()));
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -148,7 +161,7 @@ public class NewUnitFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 bottomSheetDialog.cancel();
-                binding.ivUnit.setImageResource(drawablesInUnits.get(position));
+                unitsViewModel.setUnitImage(drawablesInUnits.get(position));
             }
         });
     }
@@ -231,7 +244,6 @@ public class NewUnitFragment extends Fragment {
             imageView.setScaleType(ImageView.ScaleType.CENTER);
 
             imageView.setBackgroundResource(R.drawable.frame);
-
             return imageView;
         }
     }

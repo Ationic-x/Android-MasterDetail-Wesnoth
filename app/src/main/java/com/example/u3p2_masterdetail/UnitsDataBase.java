@@ -28,6 +28,8 @@ public abstract class UnitsDataBase extends RoomDatabase {
 
         @Insert
         void insert(Unit unit);
+        @Update
+        void update(Unit unit);
         @Delete
         void delete(Unit unit);
     }

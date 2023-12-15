@@ -2,7 +2,6 @@ package com.example.u3p2_masterdetail;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -26,14 +25,21 @@ public class UnitsRepository {
 
     // Methods that change the DataBase are executed in the background
     void insert(Unit unit){
-        executor.execute(() -> {
-            unitsDao.insert(unit);
-        });
+        executor.execute(() ->
+            unitsDao.insert(unit)
+        );
     }
 
     void delete(Unit unit){
+        executor.execute(() ->
+            unitsDao.delete(unit)
+        );
+    }
+
+    void update(Unit unit, int image){
         executor.execute(() -> {
-            unitsDao.delete(unit);
+            unit.image = image;
+            unitsDao.update(unit);
         });
     }
 

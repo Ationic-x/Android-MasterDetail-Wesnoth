@@ -101,6 +101,8 @@ public class RecyclerUnitsFragment extends Fragment {
             Unit unit = units.get(position); // position
 
             holder.binding.tvName.setText(unit.name); // set name
+            holder.binding.tvValues.setText(getString(R.string.unit_values, String.valueOf(unit.cost), String.valueOf(unit.hp), String.valueOf(unit.xp), String.valueOf(unit.mp)));
+            holder.binding.ivUnit.setImageResource(unit.image);
 
             // Click event, update viewModel selected unit and navigate the unit fragment
             holder.itemView.setOnClickListener(v -> {

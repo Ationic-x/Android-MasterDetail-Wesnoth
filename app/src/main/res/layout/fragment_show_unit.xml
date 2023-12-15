@@ -1,27 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".ShowUnitFragment">
+        android:padding="15dp"
+        tools:context=".NewUnitFragment">
 
-
-    <ImageView
-            android:id="@+id/iw_unit"
+    <FrameLayout
+            android:id="@+id/fl_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/image_show_unit"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingEnd="15dp"
+            android:paddingBottom="15dp"
+            android:layout_gravity="center">
+
+        <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/frame"
+                android:layout_gravity="center"/>
+        <ImageView
+                android:id="@+id/iv_unit"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"/>
+    </FrameLayout>
+    <!-- Name -->
     <TextView
             android:id="@+id/tv_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="48sp"/>
+            app:layout_constraintStart_toEndOf="@id/fl_unit"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    <!-- Data -->
+    <TextView
+            android:id="@+id/tv_cost"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/fl_unit"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            app:layout_constraintEnd_toStartOf="@+id/tv_hp"
+            android:text="@string/cost_value"/>
+    <TextView
+            android:id="@+id/tv_hp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/tv_cost"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            android:text="@string/hp_value"/>
+    <TextView
+            android:id="@+id/tv_xp"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/fl_unit"
+            app:layout_constraintTop_toBottomOf="@+id/tv_cost"
+            app:layout_constraintEnd_toStartOf="@+id/tv_mp"
+            android:text="@string/xp_value"/>
+    <TextView
+            android:id="@+id/tv_mp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/tv_xp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_hp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/mp_value"/>
+    <!-- Description -->
     <TextView
             android:id="@+id/tv_description"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="24sp"/>
-</LinearLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fl_unit"
+            app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
