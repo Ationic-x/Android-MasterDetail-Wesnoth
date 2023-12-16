@@ -1,4 +1,4 @@
-package com.example.u3p2_masterdetail;
+package com.example.u3p2_masterdetail.fragments;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -10,7 +10,12 @@ import android.view.ViewGroup;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import com.example.u3p2_masterdetail.NavGraphDirections;
+import com.example.u3p2_masterdetail.R;
+import com.example.u3p2_masterdetail.viewmodel.UnitsViewModel;
 import com.example.u3p2_masterdetail.databinding.FragmentShowUnitBinding;
+
+import java.util.Objects;
 
 // Class to show specific unit info
 public class ShowUnitFragment extends Fragment {
@@ -33,18 +38,18 @@ public class ShowUnitFragment extends Fragment {
         NavController navController = Navigation.findNavController(view);
         // Get from the viewModel the selected Unit, show on Screen the Data
         unitsViewModel.getSelected().observe(getViewLifecycleOwner(), unit -> {
-            binding.tvName.setText(unit.name);
-            binding.tvDescription.setText(unit.description);
-            binding.ivUnit.setImageResource(unit.image);
-            binding.tvCost.setText(getString(R.string.cost_value, String.valueOf(unit.cost)));
-            binding.tvHp.setText(getString(R.string.hp_value, String.valueOf(unit.hp)));
-            binding.tvMp.setText(getString(R.string.mp_value, String.valueOf(unit.mp)));
-            binding.tvXp.setText(getString(R.string.xp_value, String.valueOf(unit.xp)));
+            binding.tvName.setText(unit.getName());
+            binding.tvDescription.setText(unit.getDescription());
+            binding.ivUnit.setImageResource(unit.getImage());
+            binding.tvCost.setText(getString(R.string.cost_value, String.valueOf(unit.getCost())));
+            binding.tvHp.setText(getString(R.string.hp_value, String.valueOf(unit.getHp())));
+            binding.tvMp.setText(getString(R.string.mp_value, String.valueOf(unit.getMp())));
+            binding.tvXp.setText(getString(R.string.xp_value, String.valueOf(unit.getXp())));
         });
 
         NavGraphDirections.ActionGlobalNewUnitFragment action = NavGraphDirections.actionGlobalNewUnitFragment(true);
         binding.fbtnGoModifyUnit.setOnClickListener( v -> {
-            unitsViewModel.setUnitImage(unitsViewModel.getSelected().getValue().image);
+            unitsViewModel.setUnitImage(Objects.requireNonNull(unitsViewModel.getSelected().getValue()).getImage());
             navController.navigate(action);
         });
     }

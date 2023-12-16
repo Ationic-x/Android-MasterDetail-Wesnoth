@@ -1,4 +1,4 @@
-package com.example.u3p2_masterdetail;
+package com.example.u3p2_masterdetail.units;
 
 import android.content.Context;
 import androidx.lifecycle.LiveData;
@@ -14,7 +14,7 @@ import androidx.room.Room;
 import java.util.List;
 
 // Annotation related database
-@Database(entities = { Unit.class }, version = 2, exportSchema = false)
+@Database(entities = { Unit.class }, version = 1, exportSchema = false)
 // Class singleton that works as a DataBase (SQLite)
 public abstract class UnitsDataBase extends RoomDatabase {
     private static volatile UnitsDataBase INSTANCE; // Volatile object of itself

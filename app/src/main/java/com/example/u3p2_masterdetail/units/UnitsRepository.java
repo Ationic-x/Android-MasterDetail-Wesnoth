@@ -1,4 +1,4 @@
-package com.example.u3p2_masterdetail;
+package com.example.u3p2_masterdetail.units;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
@@ -13,38 +13,38 @@ public class UnitsRepository {
     Executor executor; // Execute on background threads
 
     // Constructor init Executor and Database
-    UnitsRepository(Application application){
+    public UnitsRepository(Application application){
         unitsDao = UnitsDataBase.getInstance(application).getUnitsDao();
         executor = Executors.newSingleThreadExecutor();
     }
 
     // Extended method from DataBase
-    LiveData<List<Unit>> get(){
+    public LiveData<List<Unit>> get(){
         return unitsDao.get();
     }
 
     // Methods that change the DataBase are executed in the background
-    void insert(Unit unit){
+    public void insert(Unit unit){
         executor.execute(() ->
             unitsDao.insert(unit)
         );
     }
 
-    void delete(Unit unit){
+    public void delete(Unit unit){
         executor.execute(() ->
             unitsDao.delete(unit)
         );
     }
 
-    void update(Unit oldUnit, Unit newUnit){
+    public void update(Unit oldUnit, Unit newUnit){
         executor.execute(() -> {
-            oldUnit.name = newUnit.name;
-            oldUnit.image = newUnit.image;
-            oldUnit.mp = newUnit.mp;
-            oldUnit.cost = newUnit.cost;
-            oldUnit.xp = newUnit.xp;
-            oldUnit.hp = newUnit.hp;
-            oldUnit.description = newUnit.description;
+            oldUnit.setName(newUnit.getName());
+            oldUnit.setImage(newUnit.getImage());
+            oldUnit.setMp(newUnit.getMp());
+            oldUnit.setCost(newUnit.getCost());
+            oldUnit.setXp(newUnit.getXp());
+            oldUnit.setHp(newUnit.getHp());
+            oldUnit.setDescription(newUnit.getDescription());
             unitsDao.update(oldUnit);
         });
     }

@@ -1,4 +1,4 @@
-package com.example.u3p2_masterdetail;
+package com.example.u3p2_masterdetail.fragments;
 
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -13,6 +13,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.u3p2_masterdetail.NavGraphDirections;
+import com.example.u3p2_masterdetail.R;
+import com.example.u3p2_masterdetail.units.Unit;
+import com.example.u3p2_masterdetail.viewmodel.UnitsViewModel;
 import com.example.u3p2_masterdetail.databinding.FragmentRecyclerUnitsBinding;
 import com.example.u3p2_masterdetail.databinding.ViewholderUnitBinding;
 import org.jetbrains.annotations.NotNull;
@@ -98,9 +102,9 @@ public class RecyclerUnitsFragment extends Fragment {
         public void onBindViewHolder(@NonNull UnitViewHolder holder, int position) {
             Unit unit = units.get(position); // position
 
-            holder.binding.tvName.setText(unit.name); // set name
-            holder.binding.tvValues.setText(getString(R.string.unit_values, String.valueOf(unit.cost), String.valueOf(unit.hp), String.valueOf(unit.xp), String.valueOf(unit.mp)));
-            holder.binding.ivUnit.setImageResource(unit.image);
+            holder.binding.tvName.setText(unit.getName()); // set name
+            holder.binding.tvValues.setText(getString(R.string.unit_values, String.valueOf(unit.getCost()), String.valueOf(unit.getHp()), String.valueOf(unit.getXp()), String.valueOf(unit.getMp())));
+            holder.binding.ivUnit.setImageResource(unit.getImage());
 
             // Click event, update viewModel selected unit and navigate the unit fragment
             holder.itemView.setOnClickListener(v -> {

@@ -1,10 +1,13 @@
-package com.example.u3p2_masterdetail;
+package com.example.u3p2_masterdetail.viewmodel;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.example.u3p2_masterdetail.R;
+import com.example.u3p2_masterdetail.units.Unit;
+import com.example.u3p2_masterdetail.units.UnitsRepository;
 
 import java.util.List;
 
@@ -22,36 +25,36 @@ public class UnitsViewModel extends AndroidViewModel {
     }
 
     // Getter and setter related mutable values
-    MutableLiveData<Unit> getSelected() {
+    public MutableLiveData<Unit> getSelected() {
         return unitSelected;
     }
 
-    void setSelected(Unit unit) {
+    public void setSelected(Unit unit) {
         unitSelected.setValue(unit);
     }
 
-    MutableLiveData<Integer> getUnitImage() {
+    public MutableLiveData<Integer> getUnitImage() {
         return unitImage;
     }
 
-    void setUnitImage(Integer image) {
+    public void setUnitImage(Integer image) {
         unitImage.setValue(image);
     }
 
     // Extended repository method
-    LiveData<List<Unit>> get(){
+    public LiveData<List<Unit>> get(){
         return unitsRepository.get();
     }
 
-    void insert(Unit unit){
+    public void insert(Unit unit){
         unitsRepository.insert(unit);
     }
 
-    void delete(Unit unit){
+    public void delete(Unit unit){
         unitsRepository.delete(unit);
     }
 
-    void update(Unit oldUnit, Unit newUnit){
+    public void update(Unit oldUnit, Unit newUnit){
         unitsRepository.update(oldUnit, newUnit);
     }
 
