@@ -1,9 +1,9 @@
 package com.example.u3p2_masterdetail.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +29,9 @@ public class PictureSelector {
     private final GridView gridViewImages;
     private FrameLayout bottomSheet;
 
-    private UnitsViewModel unitsViewModel;
+    private final UnitsViewModel unitsViewModel;
 
+    @SuppressLint("InflateParams")
     public PictureSelector(List<Integer> pictures, Context context, UnitsViewModel unitsViewModel){
         this.pictures = pictures;
         this.context = context;

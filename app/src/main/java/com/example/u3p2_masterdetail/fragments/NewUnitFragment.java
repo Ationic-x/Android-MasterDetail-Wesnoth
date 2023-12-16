@@ -88,9 +88,10 @@ public class NewUnitFragment extends Fragment {
                     unitsViewModel.update(selectedUnit, newUnit());
                     // Return to the last fragment
                     navController.popBackStack();
+                } else {
+                    binding.etName.setError("You need to enter a name");
+                    binding.etDescription.setError("You need to enter a description");
                 }
-                binding.etName.setError("You need to enter a name");
-                binding.etDescription.setError("You need to enter a description");
             });
         } else {
 
@@ -103,9 +104,10 @@ public class NewUnitFragment extends Fragment {
                     unitsViewModel.insert(newUnit());
                     // Return to the last fragment
                     navController.popBackStack();
+                } else {
+                    binding.etName.setError("You need to enter a name");
+                    binding.etDescription.setError("You need to enter a description");
                 }
-                binding.etName.setError("You need to enter a name");
-                binding.etDescription.setError("You need to enter a description");
 
             });
 
