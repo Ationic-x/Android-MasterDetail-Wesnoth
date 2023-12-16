@@ -1,9 +1,9 @@
 package com.example.u3p2_masterdetail.utils;
 
-import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +14,10 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.example.u3p2_masterdetail.R;
-import com.example.u3p2_masterdetail.fragments.NewUnitFragment;
 import com.example.u3p2_masterdetail.viewmodel.UnitsViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import java.util.List;
-
-import static androidx.core.content.ContentProviderCompat.requireContext;
 
 
 public class PictureSelector {

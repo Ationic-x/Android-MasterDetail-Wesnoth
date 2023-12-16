@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="15dp"
-        tools:context=".fragments.NewUnitFragment">
+        tools:context=".fragments.NewUnitFragment"
+        android:background="@color/half_black">
 
     <FrameLayout
             android:id="@+id/fl_unit"
@@ -37,7 +38,10 @@
             app:layout_constraintStart_toEndOf="@id/fl_unit"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:hint="@string/nw_unit_name"/>
+            android:hint="@string/nw_unit_name"
+            android:textColor="@color/white"
+            android:textColorHint="@color/dark_gray"
+            android:backgroundTint="@color/gray"/>
     <!-- Cost -->
     <TextView
             android:id="@+id/tv_cost"
@@ -47,7 +51,8 @@
             app:layout_constraintStart_toEndOf="@id/fl_unit"
             app:layout_constraintBottom_toBottomOf="@id/et_cost"
             android:gravity="center|start"
-            android:text="@string/cost"/>
+            android:text="@string/cost"
+            android:textColor="@color/white"/>
 
     <EditText
             android:id="@+id/et_cost"
@@ -58,7 +63,9 @@
             app:layout_constraintBottom_toTopOf="@id/et_xp"
             android:inputType="none"
             android:focusable="false"
-            android:text="@string/empty_value"/>
+            android:text="@string/empty_value"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/gray"/>
     <!-- HP -->
     <TextView
             android:id="@+id/tv_hp"
@@ -68,7 +75,8 @@
             app:layout_constraintStart_toEndOf="@id/et_cost"
             app:layout_constraintBottom_toBottomOf="@id/et_hp"
             android:gravity="center|start"
-            android:text="@string/hp"/>
+            android:text="@string/hp"
+            android:textColor="@color/white"/>
 
     <EditText
             android:id="@+id/et_hp"
@@ -80,7 +88,9 @@
             app:layout_constraintBottom_toTopOf="@id/et_mp"
             android:inputType="none"
             android:focusable="false"
-            android:text="@string/empty_value"/>
+            android:text="@string/empty_value"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/gray"/>
     <!-- XP -->
     <TextView
             android:id="@+id/tv_xp"
@@ -90,7 +100,8 @@
             app:layout_constraintStart_toEndOf="@id/fl_unit"
             app:layout_constraintBottom_toBottomOf="@id/et_xp"
             android:gravity="center|start"
-            android:text="@string/xp"/>
+            android:text="@string/xp"
+            android:textColor="@color/white"/>
 
     <EditText
             android:id="@+id/et_xp"
@@ -100,7 +111,9 @@
             app:layout_constraintStart_toEndOf="@id/tv_xp"
             android:inputType="none"
             android:focusable="false"
-            android:text="@string/empty_value"/>
+            android:text="@string/empty_value"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/gray"/>
     <!-- MP -->
     <TextView
             android:id="@+id/tv_mp"
@@ -110,7 +123,8 @@
             app:layout_constraintStart_toEndOf="@id/et_xp"
             app:layout_constraintBottom_toBottomOf="@id/et_mp"
             android:gravity="center|start"
-            android:text="@string/mp"/>
+            android:text="@string/mp"
+            android:textColor="@color/white"/>
 
     <EditText
             android:id="@+id/et_mp"
@@ -121,7 +135,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:inputType="none"
             android:focusable="false"
-            android:text="@string/empty_value"/>
+            android:text="@string/empty_value"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/gray"/>
     <!-- Description -->
     <EditText
             android:id="@+id/et_description"
@@ -130,7 +146,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fl_unit"
             app:layout_constraintEnd_toEndOf="parent"
-            android:hint="@string/nw_unit_description"/>
+            android:hint="@string/nw_unit_description"
+            android:textColor="@color/white"
+            android:textColorHint="@color/dark_gray"
+            android:backgroundTint="@color/gray"/>
     <Button
             android:id="@+id/btn_create"
             android:layout_width="0dp"
@@ -149,7 +168,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="16dp"
             app:srcCompat="@drawable/random_dice"
-            app:maxImageSize="30dp"
+            app:maxImageSize="45dp"
+            app:backgroundTint="@color/darK_blue"
             app:tint="@null"
             android:contentDescription="@string/button"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

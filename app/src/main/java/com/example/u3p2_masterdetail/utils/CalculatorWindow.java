@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 public class CalculatorWindow {
-    Context context;
+    private final Context context;
 
     public CalculatorWindow(Context context){
         this.context = context;

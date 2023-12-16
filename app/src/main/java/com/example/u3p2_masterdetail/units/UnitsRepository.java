@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 
 // Class with the values and basic method of units
 public class UnitsRepository {
-    UnitsDataBase.UnitsDao unitsDao; // DataBase of unit (Data Access Object)
-    Executor executor; // Execute on background threads
+    private final UnitsDataBase.UnitsDao unitsDao; // DataBase of unit (Data Access Object)
+    private final Executor executor; // Execute on background threads
 
     // Constructor init Executor and Database
     public UnitsRepository(Application application){

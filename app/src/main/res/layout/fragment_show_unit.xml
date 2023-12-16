@@ -6,7 +6,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="15dp"
-        tools:context=".fragments.NewUnitFragment">
+        tools:context=".fragments.NewUnitFragment"
+        android:background="@color/half_black">
 
     <FrameLayout
             android:id="@+id/fl_unit"
@@ -39,7 +40,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textSize="30sp"
             android:paddingTop="4dp"
-            android:paddingBottom="4dp" android:textStyle="bold"/>
+            android:paddingBottom="4dp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
     <!-- Data -->
     <TextView
             android:id="@+id/tv_cost"
@@ -51,7 +54,8 @@
             android:textSize="18sp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:text="@string/cost_value"/>
+            android:text="@string/cost_value"
+            android:textColor="@color/white"/>
     <TextView
             android:id="@+id/tv_hp"
             android:layout_width="0dp"
@@ -62,7 +66,8 @@
             android:textSize="18sp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:text="@string/hp_value"/>
+            android:text="@string/hp_value"
+            android:textColor="@color/white"/>
     <TextView
             android:id="@+id/tv_xp"
             android:layout_width="110dp"
@@ -73,7 +78,8 @@
             android:textSize="18sp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:text="@string/xp_value"/>
+            android:text="@string/xp_value"
+            android:textColor="@color/white"/>
     <TextView
             android:id="@+id/tv_mp"
             android:layout_width="0dp"
@@ -84,7 +90,8 @@
             android:textSize="18sp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:text="@string/mp_value"/>
+            android:text="@string/mp_value"
+            android:textColor="@color/white"/>
     <!-- Description -->
     <TextView
             android:id="@+id/tv_description"
@@ -95,7 +102,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textSize="18sp"
             android:paddingTop="4dp"
-            android:paddingBottom="4dp"/>
+            android:paddingBottom="4dp"
+            android:textColor="@color/white"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fbtn_go_modify_unit"
@@ -105,5 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="16dp"
             app:srcCompat="@android:drawable/ic_menu_edit"
+            app:tint="@color/white"
+            app:backgroundTint="@color/darK_blue"
             android:contentDescription="@string/button"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

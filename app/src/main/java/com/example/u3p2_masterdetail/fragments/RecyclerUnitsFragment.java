@@ -1,6 +1,7 @@
 package com.example.u3p2_masterdetail.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -47,7 +49,7 @@ public class RecyclerUnitsFragment extends Fragment {
         navController = Navigation.findNavController(view);
         // Method floating button -> navigate new unit fragment
         NavGraphDirections.ActionGlobalNewUnitFragment action = NavGraphDirections.actionGlobalNewUnitFragment(false);
-        binding.fbtnGoNewUnit.setOnClickListener( v -> {
+        binding.fbtnGoNewUnit.setOnClickListener(v -> {
             unitsViewModel.setUnitImage(R.drawable.unit_unknown);
             navController.navigate(action);
         });
@@ -56,13 +58,19 @@ public class RecyclerUnitsFragment extends Fragment {
         unitsAdapter = new UnitsAdapter();
         binding.rvUnits.setAdapter(unitsAdapter);
         // Observe when there are changes on the list of units
-        getUnits().observe(getViewLifecycleOwner(), units -> unitsAdapter.establishList(units));
+        getUnits().observe(getViewLifecycleOwner(), updatedUnits -> {
+            List<Unit> originalUnits = unitsAdapter.units;
+            int option;
+            if (originalUnits == null) option = 0;
+            else option = 1;
+
+            int changedPosition = findChangedPosition(originalUnits, updatedUnits);
+            unitsAdapter.establishList(updatedUnits, changedPosition, option);
+        });
 
 
         // When an Item is touched get callbacks (up, down drag) (left, right swipe)
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             // Disable all kind of movement
             @Override
@@ -81,8 +89,20 @@ public class RecyclerUnitsFragment extends Fragment {
     }
 
     // Get all units from the ViewModel
-    protected LiveData<List<Unit>> getUnits(){
+    private LiveData<List<Unit>> getUnits() {
         return unitsViewModel.get();
+    }
+
+    private int findChangedPosition(List<Unit> originalUnits, List<Unit> updateUnits) {
+        if (originalUnits == null) {
+            return updateUnits.size();
+        }
+        for (int i = 0; i < updateUnits.size(); ++i) {
+            if (originalUnits.get(i).getId() != updateUnits.get(i).getId()) {
+                return i;
+            }
+        }
+        return updateUnits.size();
     }
 
     // Adapter for the RecyclerView
@@ -120,15 +140,21 @@ public class RecyclerUnitsFragment extends Fragment {
         }
 
         // Update the list and notify the change
-        public void establishList(List<Unit> units) {
+        private void establishList(List<Unit> units, int changedPosition, int option) {
             this.units = units;
-            notifyDataSetChanged();
+            switch (option) {
+                case 0:
+                    notifyItemChanged(changedPosition);
+                case 1:
+                    notifyItemRemoved(changedPosition);
+            }
+
         }
     }
 
 
     // Class related view holder
-    class UnitViewHolder extends RecyclerView.ViewHolder {
+    static class UnitViewHolder extends RecyclerView.ViewHolder {
         private final ViewholderUnitBinding binding;
 
         // Constructor that init binding

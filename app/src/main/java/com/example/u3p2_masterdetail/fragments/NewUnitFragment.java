@@ -65,6 +65,11 @@ public class NewUnitFragment extends Fragment {
 
         getImage().observe(getViewLifecycleOwner(), image -> binding.ivUnit.setImageResource(image));
 
+
+        List<Integer> unitDrawables = getDrawables("unit");
+        PictureSelector pictureSelector = new PictureSelector(unitDrawables, getContext(), unitsViewModel);
+        DialogNumberPicker dialogNumberPicker = new DialogNumberPicker(0, 300, getContext());
+
         if (modify) {
             binding.btnCreate.setText(R.string.unit_modify);
 
@@ -73,64 +78,47 @@ public class NewUnitFragment extends Fragment {
             if (selectedUnit == null) {
                 navController.popBackStack();
             }
-            binding.etDescription.setText(Objects.requireNonNull(selectedUnit).getDescription());
-            binding.etName.setText(String.valueOf(selectedUnit.getName()));
-            binding.etHp.setText(String.valueOf(selectedUnit.getHp()));
-            binding.etXp.setText(String.valueOf(selectedUnit.getXp()));
-            binding.etMp.setText(String.valueOf(selectedUnit.getMp()));
-            binding.etCost.setText(String.valueOf(selectedUnit.getCost()));
+
+            setUnitValues(selectedUnit);
 
             // Defined the behavior of the button (on click event)
             binding.btnCreate.setOnClickListener(v -> {
-                // Get values in the view
-                String name = binding.etName.getText().toString();
-                String description = binding.etDescription.getText().toString();
-                int cost = Integer.parseInt(binding.etCost.getText().toString());
-                int hp = Integer.parseInt(binding.etHp.getText().toString());
-                int xp = Integer.parseInt(binding.etXp.getText().toString());
-                int mp = Integer.parseInt(binding.etMp.getText().toString());
-                Integer image = unitsViewModel.getUnitImage().getValue();
-                // Insert new view model
-                unitsViewModel.update(selectedUnit, new Unit(name, description, image == null ? R.drawable.unit_unknown : image, cost, hp, xp, mp));
-                // Return to the last fragment
-                navController.popBackStack();
+                if(!(binding.etName.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty())){
+                    // Insert new view model
+                    unitsViewModel.update(selectedUnit, newUnit());
+                    // Return to the last fragment
+                    navController.popBackStack();
+                }
+                binding.etName.setError("You need to enter a name");
+                binding.etDescription.setError("You need to enter a description");
             });
         } else {
+
             binding.btnCreate.setText(R.string.nw_unit_create);
 
             // Defined the behavior of the button (on click event)
             binding.btnCreate.setOnClickListener(v -> {
-                // Get values in the view
-                String name = binding.etName.getText().toString();
-                String description = binding.etDescription.getText().toString();
-                int cost = Integer.parseInt(binding.etCost.getText().toString());
-                int hp = Integer.parseInt(binding.etHp.getText().toString());
-                int xp = Integer.parseInt(binding.etXp.getText().toString());
-                int mp = Integer.parseInt(binding.etMp.getText().toString());
-                Integer image = unitsViewModel.getUnitImage().getValue();
-                // Insert new view model
-                unitsViewModel.insert(new Unit(name, description, image == null ? R.drawable.unit_unknown : image, cost, hp, xp, mp));
-                // Return to the last fragment
-                navController.popBackStack();
+                if(!(binding.etName.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty())){
+                    // Insert new view model
+                    unitsViewModel.insert(newUnit());
+                    // Return to the last fragment
+                    navController.popBackStack();
+                }
+                binding.etName.setError("You need to enter a name");
+                binding.etDescription.setError("You need to enter a description");
+
             });
+
         }
-
-        List<Integer> unitDrawables = getDrawables("unit");
-        PictureSelector pictureSelector = new PictureSelector(unitDrawables, getContext(), unitsViewModel);
-        DialogNumberPicker dialogNumberPicker = new DialogNumberPicker(0, 300, getContext());
-
-        binding.flUnit.setOnClickListener(v -> pictureSelector.show());
 
         binding.fbtnRandomUnit.setOnClickListener(v -> {
 
             for (int i = 0; i < 11; i++) {
-                handler.postDelayed(() -> {
-                    randomConfiguration(unitDrawables);
-                },(int) Math.pow(1.9, i));
+                handler.postDelayed(() -> randomConfiguration(unitDrawables), (int) Math.pow(1.9, i));
             }
         });
 
-
+        binding.flUnit.setOnClickListener(v -> pictureSelector.show());
 
         binding.etCost.setOnClickListener(v -> dialogNumberPicker.show(binding.etCost));
         binding.etHp.setOnClickListener(v -> dialogNumberPicker.show(binding.etHp));
@@ -138,7 +126,28 @@ public class NewUnitFragment extends Fragment {
         binding.etMp.setOnClickListener(v -> dialogNumberPicker.show(binding.etMp));
     }
 
-    private void randomConfiguration(List<Integer> unitDrawables){
+    private void setUnitValues(Unit selectedUnit) {
+        binding.etDescription.setText(Objects.requireNonNull(selectedUnit).getDescription());
+        binding.etName.setText(selectedUnit.getName());
+        binding.etHp.setText(String.valueOf(selectedUnit.getHp()));
+        binding.etXp.setText(String.valueOf(selectedUnit.getXp()));
+        binding.etMp.setText(String.valueOf(selectedUnit.getMp()));
+        binding.etCost.setText(String.valueOf(selectedUnit.getCost()));
+    }
+
+    private Unit newUnit() {
+        String name = binding.etName.getText().toString();
+        String description = binding.etDescription.getText().toString();
+        int cost = Integer.parseInt(binding.etCost.getText().toString());
+        int hp = Integer.parseInt(binding.etHp.getText().toString());
+        int xp = Integer.parseInt(binding.etXp.getText().toString());
+        int mp = Integer.parseInt(binding.etMp.getText().toString());
+        Integer image = unitsViewModel.getUnitImage().getValue();
+
+        return new Unit(name, description, image == null ? R.drawable.unit_unknown : image, cost, hp, xp, mp);
+    }
+
+    private void randomConfiguration(List<Integer> unitDrawables) {
         String name = nameGenerator.generateName();
         binding.etName.setText(name);
         binding.etDescription.setText(getString(R.string.random_description, name));
@@ -152,6 +161,7 @@ public class NewUnitFragment extends Fragment {
     protected LiveData<Integer> getImage() {
         return unitsViewModel.getUnitImage();
     }
+
     public static List<Integer> getDrawables(String type) {
         List<Integer> drawableList = new ArrayList<>();
         try {

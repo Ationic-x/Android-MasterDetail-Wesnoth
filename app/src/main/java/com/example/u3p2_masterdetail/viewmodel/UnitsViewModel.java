@@ -13,9 +13,9 @@ import java.util.List;
 
 // ViewModel info related Fragments (view) and Database + Unit (Model)
 public class UnitsViewModel extends AndroidViewModel {
-    UnitsRepository unitsRepository; // Repository where is stored the values
-    MutableLiveData<Unit> unitSelected = new MutableLiveData<>(); // Mutable value (change in view)
-    MutableLiveData<Integer> unitImage = new MutableLiveData<>(R.drawable.unit_unknown);
+    private final UnitsRepository unitsRepository; // Repository where is stored the values
+    private final MutableLiveData<Unit> unitSelected = new MutableLiveData<>(); // Mutable value (change in view)
+    private final MutableLiveData<Integer> unitImage = new MutableLiveData<>(R.drawable.unit_unknown);
 
     // Constructor, defined the AndroidViewModel and Repository
     public UnitsViewModel(@NonNull Application application){
