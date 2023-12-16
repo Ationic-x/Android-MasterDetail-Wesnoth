@@ -13,13 +13,13 @@ import androidx.room.Room;
 
 import java.util.List;
 
-// Annotation related database
+// Annotation related to the database
 @Database(entities = { Unit.class }, version = 2, exportSchema = false)
-// Class singleton that works as a DataBase (SQLite)
+// Class representing a singleton that works as a database (SQLite)
 public abstract class UnitsDataBase extends RoomDatabase {
     private static volatile UnitsDataBase INSTANCE; // Volatile object of itself
 
-    // Dao all methods related to work with the Database
+    // Dao with all methods related to working with the database
     // Insert, Delete, Custom Query...
     @Dao
     interface UnitsDao {
@@ -28,19 +28,21 @@ public abstract class UnitsDataBase extends RoomDatabase {
 
         @Insert
         void insert(Unit unit);
+
         @Update
         void update(Unit unit);
+
         @Delete
         void delete(Unit unit);
     }
 
-    // Constructor Singleton DataBase
+    // Singleton constructor for the database
     static UnitsDataBase getInstance(final Context context) {
-        // If there is no DataBase
+        // If there is no database
         if (INSTANCE == null) {
-            // Synchronize with DataBase
+            // Synchronize with the database
             synchronized (UnitsDataBase.class) {
-                // If still no Database
+                // If still no database
                 if (INSTANCE == null) {
                     // Create a new one
                     INSTANCE = Room.databaseBuilder(context, UnitsDataBase.class, "units.db")
@@ -49,10 +51,10 @@ public abstract class UnitsDataBase extends RoomDatabase {
                 }
             }
         }
-        // Return DataBase
+        // Return the database
         return INSTANCE;
     }
 
-    // Method get UnitsDao
+    // Method to get UnitsDao
     abstract UnitsDao getUnitsDao();
 }

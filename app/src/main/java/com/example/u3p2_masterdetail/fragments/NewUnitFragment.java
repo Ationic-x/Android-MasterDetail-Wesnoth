@@ -32,10 +32,8 @@ public class NewUnitFragment extends Fragment {
 
     private FragmentNewUnitBinding binding;
     private UnitsViewModel unitsViewModel;
-
     private Handler handler;
     private NameGenerator nameGenerator;
-
 
     // Inflate and get the binding
     @Override
@@ -49,33 +47,43 @@ public class NewUnitFragment extends Fragment {
         handler.removeCallbacksAndMessages(null);
     }
 
-    // After create the view, set the behavior
+    // After creating the view, set the behavior
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        handler = new Handler(Looper.getMainLooper());
-        super.onViewCreated(view, savedInstanceState); // Values to the father
-        boolean modify = NewUnitFragmentArgs.fromBundle(getArguments()).getModify();
+        super.onViewCreated(view, savedInstanceState);
 
-        // View model related modify db
-        unitsViewModel = new ViewModelProvider(requireActivity()).get(UnitsViewModel.class);
-        // NavController navigate between fragments
+        // Values to the father (Not clear what "Values to the father" means)
+        boolean modify = NewUnitFragmentArgs.fromBundle(getArguments()).getModify();
+        handler = new Handler(Looper.getMainLooper());
+
         NavController navController = Navigation.findNavController(view);
 
-        nameGenerator = new NameGenerator();
-
-        getImage().observe(getViewLifecycleOwner(), image -> binding.ivUnit.setImageResource(image));
-
-
+        // Get unit drawables
         List<Integer> unitDrawables = getDrawables("unit");
+
+        // Get the ViewModel
+        unitsViewModel = new ViewModelProvider(requireActivity()).get(UnitsViewModel.class);
+
+        // Initialize PictureSelector
         PictureSelector pictureSelector = new PictureSelector(unitDrawables, getContext(), unitsViewModel);
+
+        // Initialize DialogNumberPicker
         DialogNumberPicker dialogNumberPicker = new DialogNumberPicker(0, 300, getContext());
 
+        // Initialize NameGenerator
+        nameGenerator = new NameGenerator();
+
+        // Observe changes in the image and update the ImageView
+        getImage().observe(getViewLifecycleOwner(), image -> binding.ivUnit.setImageResource(image));
+
         if (modify) {
+            // If modifying, set button text and populate fields with existing unit data
             binding.btnCreate.setText(R.string.unit_modify);
 
             Unit selectedUnit = (unitsViewModel.getSelected()).getValue();
 
             if (selectedUnit == null) {
+                // If no selected unit, go back to the previous fragment
                 navController.popBackStack();
             }
 
@@ -83,51 +91,55 @@ public class NewUnitFragment extends Fragment {
 
             // Defined the behavior of the button (on click event)
             binding.btnCreate.setOnClickListener(v -> {
-                if(!(binding.etName.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty())){
+                if (!(binding.etName.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty())) {
                     // Insert new view model
                     unitsViewModel.update(selectedUnit, newUnit());
                     // Return to the last fragment
                     navController.popBackStack();
                 } else {
+                    // Show error if name or description is empty
                     binding.etName.setError("You need to enter a name");
                     binding.etDescription.setError("You need to enter a description");
                 }
             });
         } else {
-
+            // If creating a new unit, set button text accordingly
             binding.btnCreate.setText(R.string.nw_unit_create);
 
             // Defined the behavior of the button (on click event)
             binding.btnCreate.setOnClickListener(v -> {
-                if(!(binding.etName.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty())){
+                if (!(binding.etName.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty())) {
                     // Insert new view model
                     unitsViewModel.insert(newUnit());
                     // Return to the last fragment
                     navController.popBackStack();
                 } else {
+                    // Show error if name or description is empty
                     binding.etName.setError("You need to enter a name");
                     binding.etDescription.setError("You need to enter a description");
                 }
-
             });
-
         }
 
+        // Set click listener for the random unit button
         binding.fbtnRandomUnit.setOnClickListener(v -> {
-
+            // Generate random configuration for the unit
             for (int i = 0; i < 11; i++) {
                 handler.postDelayed(() -> randomConfiguration(unitDrawables), (int) Math.pow(1.9, i));
             }
         });
 
+        // Set click listener for the unit image selection
         binding.flUnit.setOnClickListener(v -> pictureSelector.show());
 
+        // Set click listeners for the number input fields
         binding.etCost.setOnClickListener(v -> dialogNumberPicker.show(binding.etCost));
         binding.etHp.setOnClickListener(v -> dialogNumberPicker.show(binding.etHp));
         binding.etXp.setOnClickListener(v -> dialogNumberPicker.show(binding.etXp));
         binding.etMp.setOnClickListener(v -> dialogNumberPicker.show(binding.etMp));
     }
 
+    // Populate fields with values from the selected unit
     private void setUnitValues(Unit selectedUnit) {
         binding.etDescription.setText(Objects.requireNonNull(selectedUnit).getDescription());
         binding.etName.setText(selectedUnit.getName());
@@ -137,6 +149,7 @@ public class NewUnitFragment extends Fragment {
         binding.etCost.setText(String.valueOf(selectedUnit.getCost()));
     }
 
+    // Create a new Unit object from the input fields
     private Unit newUnit() {
         String name = binding.etName.getText().toString();
         String description = binding.etDescription.getText().toString();
@@ -149,6 +162,7 @@ public class NewUnitFragment extends Fragment {
         return new Unit(name, description, image == null ? R.drawable.unit_unknown : image, cost, hp, xp, mp);
     }
 
+    // Generate a random configuration for the unit
     private void randomConfiguration(List<Integer> unitDrawables) {
         String name = nameGenerator.generateName();
         binding.etName.setText(name);
@@ -160,10 +174,12 @@ public class NewUnitFragment extends Fragment {
         unitsViewModel.setUnitImage(unitDrawables.get((int) (Math.random() * unitDrawables.size())));
     }
 
+    // Get the LiveData for the unit image
     protected LiveData<Integer> getImage() {
         return unitsViewModel.getUnitImage();
     }
 
+    // Get a list of drawable resources based on a type
     public static List<Integer> getDrawables(String type) {
         List<Integer> drawableList = new ArrayList<>();
         try {
@@ -178,6 +194,7 @@ public class NewUnitFragment extends Fragment {
                 }
             }
         } catch (IllegalAccessException e) {
+            // Log an error if there's an issue getting drawables
             Log.d("Get Drawables", e.toString());
         }
         return drawableList;

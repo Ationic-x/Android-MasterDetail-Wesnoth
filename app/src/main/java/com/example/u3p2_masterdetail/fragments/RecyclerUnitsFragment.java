@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-
 public class RecyclerUnitsFragment extends Fragment {
 
     private FragmentRecyclerUnitsBinding binding;
@@ -37,25 +36,27 @@ public class RecyclerUnitsFragment extends Fragment {
         return (binding = FragmentRecyclerUnitsBinding.inflate(inflater, container, false)).getRoot();
     }
 
-    // After create the view, set the behavior
+    // After creating the view, set the behavior
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Init View Model and the NavController
+        // Initialize ViewModel and NavController
         unitsViewModel = new ViewModelProvider(requireActivity()).get(UnitsViewModel.class);
         navController = Navigation.findNavController(view);
-        // Method floating button -> navigate new unit fragment
+
+        // Method floating button -> navigate to new unit fragment
         NavGraphDirections.ActionGlobalNewUnitFragment action = NavGraphDirections.actionGlobalNewUnitFragment(false);
         binding.fbtnGoNewUnit.setOnClickListener(v -> {
             unitsViewModel.setUnitImage(R.drawable.unit_unknown);
             navController.navigate(action);
         });
 
-        // Create adapter and set on the Recycle View
+        // Create adapter and set it on the RecyclerView
         unitsAdapter = new UnitsAdapter();
         binding.rvUnits.setAdapter(unitsAdapter);
-        // Observe when there are changes on the list of units
+
+        // Observe changes in the list of units
         getUnits().observe(getViewLifecycleOwner(), updatedUnits -> {
             List<Unit> originalUnits = unitsAdapter.units;
             int option;
@@ -65,7 +66,6 @@ public class RecyclerUnitsFragment extends Fragment {
             int changedPosition = findChangedPosition(originalUnits, updatedUnits);
             unitsAdapter.establishList(updatedUnits, changedPosition, option);
         });
-
 
         // When an Item is touched get callbacks (up, down drag) (left, right swipe)
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -79,11 +79,11 @@ public class RecyclerUnitsFragment extends Fragment {
             // Capture Swipe
             @Override
             public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
-                // When Swipe, check the unit swiped and delete
+                // When swiped, check the unit swiped and delete
                 Unit unit = unitsAdapter.units.get(viewHolder.getAdapterPosition());
                 unitsViewModel.delete(unit);
             }
-        }).attachToRecyclerView(binding.rvUnits); // Link to Recycler View
+        }).attachToRecyclerView(binding.rvUnits); // Link to RecyclerView
     }
 
     // Get all units from the ViewModel
@@ -91,6 +91,7 @@ public class RecyclerUnitsFragment extends Fragment {
         return unitsViewModel.get();
     }
 
+    // Find the position of the changed unit in the list
     private int findChangedPosition(List<Unit> originalUnits, List<Unit> updateUnits) {
         if (originalUnits == null) {
             return updateUnits.size();
@@ -118,20 +119,20 @@ public class RecyclerUnitsFragment extends Fragment {
         // Bind element View Holder
         @Override
         public void onBindViewHolder(@NonNull UnitViewHolder holder, int position) {
-            Unit unit = units.get(position); // position
+            Unit unit = units.get(position);
 
             holder.binding.tvName.setText(unit.getName()); // set name
             holder.binding.tvValues.setText(getString(R.string.unit_values, String.valueOf(unit.getCost()), String.valueOf(unit.getHp()), String.valueOf(unit.getXp()), String.valueOf(unit.getMp())));
             holder.binding.ivUnit.setImageResource(unit.getImage());
 
-            // Click event, update viewModel selected unit and navigate the unit fragment
+            // Click event, update viewModel selected unit and navigate to the unit fragment
             holder.itemView.setOnClickListener(v -> {
                 unitsViewModel.setSelected(unit);
                 navController.navigate(R.id.action_global_showUnitFragment);
             });
         }
 
-        // Get how many units there is
+        // Get how many units there are
         @Override
         public int getItemCount() {
             return units != null ? units.size() : 0;
@@ -146,16 +147,14 @@ public class RecyclerUnitsFragment extends Fragment {
                 case 1:
                     notifyItemRemoved(changedPosition);
             }
-
         }
     }
-
 
     // Class related view holder
     static class UnitViewHolder extends RecyclerView.ViewHolder {
         private final ViewholderUnitBinding binding;
 
-        // Constructor that init binding
+        // Constructor that initializes binding
         public UnitViewHolder(ViewholderUnitBinding binding) {
             super(binding.getRoot());
             this.binding = binding;

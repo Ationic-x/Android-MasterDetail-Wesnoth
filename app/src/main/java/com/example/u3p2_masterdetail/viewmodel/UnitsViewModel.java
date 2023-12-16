@@ -11,20 +11,22 @@ import com.example.u3p2_masterdetail.units.UnitsRepository;
 
 import java.util.List;
 
-// ViewModel info related Fragments (view) and Database + Unit (Model)
+// ViewModel class for handling Unit-related data
 public class UnitsViewModel extends AndroidViewModel {
-    private final UnitsRepository unitsRepository; // Repository where is stored the values
-    private final MutableLiveData<Unit> unitSelected = new MutableLiveData<>(); // Mutable value (change in view)
+    // Repository responsible for storing and retrieving Unit data
+    private final UnitsRepository unitsRepository;
+    // MutableLiveData to observe the selected Unit in the view
+    private final MutableLiveData<Unit> unitSelected = new MutableLiveData<>();
+    // MutableLiveData to observe the selected Unit's image resource ID in the view
     private final MutableLiveData<Integer> unitImage = new MutableLiveData<>(R.drawable.unit_unknown);
 
-    // Constructor, defined the AndroidViewModel and Repository
-    public UnitsViewModel(@NonNull Application application){
+    // Constructor for the ViewModel, initializes the AndroidViewModel and the UnitsRepository
+    public UnitsViewModel(@NonNull Application application) {
         super(application);
-
         unitsRepository = new UnitsRepository(application);
     }
 
-    // Getter and setter related mutable values
+    // Getter and setter methods for the MutableLiveData related to the selected Unit
     public MutableLiveData<Unit> getSelected() {
         return unitSelected;
     }
@@ -33,6 +35,7 @@ public class UnitsViewModel extends AndroidViewModel {
         unitSelected.setValue(unit);
     }
 
+    // Getter and setter methods for the MutableLiveData related to the selected Unit's image resource ID
     public MutableLiveData<Integer> getUnitImage() {
         return unitImage;
     }
@@ -41,21 +44,20 @@ public class UnitsViewModel extends AndroidViewModel {
         unitImage.setValue(image);
     }
 
-    // Extended repository method
-    public LiveData<List<Unit>> get(){
+    // Extended repository methods for accessing Unit data
+    public LiveData<List<Unit>> get() {
         return unitsRepository.get();
     }
 
-    public void insert(Unit unit){
+    public void insert(Unit unit) {
         unitsRepository.insert(unit);
     }
 
-    public void delete(Unit unit){
+    public void delete(Unit unit) {
         unitsRepository.delete(unit);
     }
 
-    public void update(Unit oldUnit, Unit newUnit){
+    public void update(Unit oldUnit, Unit newUnit) {
         unitsRepository.update(oldUnit, newUnit);
     }
-
 }

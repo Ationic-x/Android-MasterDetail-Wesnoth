@@ -7,26 +7,21 @@ import org.jetbrains.annotations.NotNull;
 
 // Annotation of Entity (table)
 @Entity
-// Class model with the values related unit
+// Class model with the values related to a unit
 public class Unit {
     @PrimaryKey(autoGenerate = true)
-    private int id;// Primary key id auto generated
+    private int id; // Primary key id auto-generated
     @NonNull
     private String name;
     @NonNull
     private String description;
-
     private int image;
-
     private int cost;
-
     private int hp;
-
     private int xp;
-
     private int mp;
 
-    // Constructor with initial values (related NewUnitFragment)
+    // Constructor with initial values (related to NewUnitFragment)
     public Unit(@NotNull String name, @NotNull String description, int image, int cost, int hp, int xp, int mp) {
         this.name = name;
         this.description = description;
@@ -36,6 +31,8 @@ public class Unit {
         this.xp = xp;
         this.mp = mp;
     }
+
+    // Getter and setter methods
 
     public int getId() {
         return id;

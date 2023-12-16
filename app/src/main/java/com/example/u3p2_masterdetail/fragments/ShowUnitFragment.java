@@ -21,14 +21,13 @@ import java.util.Objects;
 public class ShowUnitFragment extends Fragment {
     private FragmentShowUnitBinding binding;
 
-
     // Inflate and get the binding
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return (binding = FragmentShowUnitBinding.inflate(inflater, container, false)).getRoot();
     }
 
-    // After create the view, set the behavior
+    // After creating the view, set the behavior
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -36,6 +35,7 @@ public class ShowUnitFragment extends Fragment {
         // Get the viewModel
         UnitsViewModel unitsViewModel = new ViewModelProvider(requireActivity()).get(UnitsViewModel.class);
         NavController navController = Navigation.findNavController(view);
+
         // Get from the viewModel the selected Unit, show on Screen the Data
         unitsViewModel.getSelected().observe(getViewLifecycleOwner(), unit -> {
             binding.tvName.setText(unit.getName());
@@ -47,9 +47,12 @@ public class ShowUnitFragment extends Fragment {
             binding.tvXp.setText(getString(R.string.xp_value, String.valueOf(unit.getXp())));
         });
 
+        // Navigation action to the Modify Unit Fragment
         NavGraphDirections.ActionGlobalNewUnitFragment action = NavGraphDirections.actionGlobalNewUnitFragment(true);
-        binding.fbtnGoModifyUnit.setOnClickListener( v -> {
+        binding.fbtnGoModifyUnit.setOnClickListener(v -> {
+            // Set the image of the selected unit in the ViewModel
             unitsViewModel.setUnitImage(Objects.requireNonNull(unitsViewModel.getSelected().getValue()).getImage());
+            // Navigate to the Modify Unit Fragment
             navController.navigate(action);
         });
     }

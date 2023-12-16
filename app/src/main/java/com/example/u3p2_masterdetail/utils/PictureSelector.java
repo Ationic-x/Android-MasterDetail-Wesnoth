@@ -19,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import java.util.List;
 
-
+// This class handles the selection of pictures using a BottomSheetDialog
 public class PictureSelector {
     private final List<Integer> pictures;
     private final Context context;
@@ -29,10 +29,11 @@ public class PictureSelector {
     private final GridView gridViewImages;
     private FrameLayout bottomSheet;
 
+    // View model for handling data related to units
     private final UnitsViewModel unitsViewModel;
 
     @SuppressLint("InflateParams")
-    public PictureSelector(List<Integer> pictures, Context context, UnitsViewModel unitsViewModel){
+    public PictureSelector(List<Integer> pictures, Context context, UnitsViewModel unitsViewModel) {
         this.pictures = pictures;
         this.context = context;
         this.calculatorWindow = new CalculatorWindow(context);
@@ -42,18 +43,20 @@ public class PictureSelector {
         initBottomSheet();
     }
 
-    private void initBottomSheet(){
+    // Initialize the BottomSheetDialog and set up its content
+    private void initBottomSheet() {
         bottomSheetDialog = new BottomSheetDialog(context);
-        PictureSelectorAdapter psAdaprter = new PictureSelectorAdapter(context, pictures);
-        gridViewImages.setAdapter(psAdaprter);
+        PictureSelectorAdapter psAdapter = new PictureSelectorAdapter(context, pictures);
+        gridViewImages.setAdapter(psAdapter);
         bottomSheetDialog.setContentView(pictureSelectorView);
         bottomSheet = bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-        if(bottomSheet != null) {
+        if (bottomSheet != null) {
             setBottomSheetBehavior();
             setGridViewBehavior();
         }
     }
 
+    // Set the behavior of the BottomSheetDialog
     private void setBottomSheetBehavior() {
         CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) bottomSheet.getLayoutParams();
         layoutParams.height = calculatorWindow.calculateHeight(0.50);
@@ -62,6 +65,7 @@ public class PictureSelector {
         BottomSheetBehavior.from(bottomSheet).addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                // Disable dragging when the BottomSheet is in the dragging state
                 if (newState == BottomSheetBehavior.STATE_DRAGGING) {
                     bottomSheetDialog.setCancelable(false);
                 } else {
@@ -71,22 +75,26 @@ public class PictureSelector {
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
+                // No action on slide
             }
         });
     }
 
-    private void setGridViewBehavior(){
+    // Set the behavior of the GridView inside the BottomSheet
+    private void setGridViewBehavior() {
         gridViewImages.setOnItemClickListener((parent, view, position, id) -> {
+            // When an item is clicked, dismiss the BottomSheet and set the selected image for the unit
             bottomSheetDialog.cancel();
             unitsViewModel.setUnitImage(pictures.get(position));
         });
     }
 
-    public void show(){
+    // Show the BottomSheetDialog
+    public void show() {
         bottomSheetDialog.show();
     }
 
+    // Adapter for the GridView to display images in the BottomSheetDialog
     static class PictureSelectorAdapter extends BaseAdapter {
         private final Context context;
         private final List<Integer> imageIds;
@@ -111,17 +119,20 @@ public class PictureSelector {
             return 0;
         }
 
+        // Set up the view for each grid item (ImageView with a scaled bitmap)
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ImageView imageView;
 
             if (convertView == null) {
+                // New layout if there is no one (275, 275)
                 imageView = new ImageView(context);
                 imageView.setLayoutParams(new GridView.LayoutParams(275, 275));
             } else {
                 imageView = (ImageView) convertView;
             }
 
+            // Resize the image with a scale
             Bitmap originalBitmap = BitmapFactory.decodeResource(context.getResources(), imageIds.get(position));
             float aspectRatio = (float) originalBitmap.getWidth() / originalBitmap.getHeight();
             int dstHeight = (int) (200 / aspectRatio);
