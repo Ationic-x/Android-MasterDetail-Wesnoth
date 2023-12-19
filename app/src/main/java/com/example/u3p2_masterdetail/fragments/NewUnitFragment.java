@@ -41,6 +41,7 @@ public class NewUnitFragment extends Fragment {
         return (binding = FragmentNewUnitBinding.inflate(inflater, container, false)).getRoot();
     }
 
+    // On destroy remove all the callbacks
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -98,8 +99,8 @@ public class NewUnitFragment extends Fragment {
                     navController.popBackStack();
                 } else {
                     // Show error if name or description is empty
-                    binding.etName.setError("You need to enter a name");
-                    binding.etDescription.setError("You need to enter a description");
+                    if(binding.etName.getText().toString().isEmpty()) binding.etName.setError("You need to enter a name");
+                    if(binding.etDescription.getText().toString().isEmpty()) binding.etDescription.setError("You need to enter a description");
                 }
             });
         } else {
@@ -115,8 +116,8 @@ public class NewUnitFragment extends Fragment {
                     navController.popBackStack();
                 } else {
                     // Show error if name or description is empty
-                    binding.etName.setError("You need to enter a name");
-                    binding.etDescription.setError("You need to enter a description");
+                    if(binding.etName.getText().toString().isEmpty()) binding.etName.setError("You need to enter a name");
+                    if(binding.etDescription.getText().toString().isEmpty()) binding.etDescription.setError("You need to enter a description");
                 }
             });
         }
